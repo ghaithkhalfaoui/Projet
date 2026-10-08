@@ -1,0 +1,72 @@
+/* ===== Espaces vendeur et admin ===== */
+.dash-layout { display: grid; grid-template-columns: 250px 1fr; min-height: 100vh; }
+
+.sidebar { background: var(--ink); color: #cfd5e1; padding: 1.5rem 1rem; display: flex; flex-direction: column; gap: 1.2rem; position: sticky; top: 0; height: 100vh; overflow-y: auto; }
+.sidebar .brand { color: #fff; padding: 0 .6rem; }
+.sidebar-role { margin: 0; padding: 0 .6rem; font-size: .8rem; color: #8b93a5; }
+.sidebar nav { display: grid; gap: .2rem; }
+.sidebar a { color: #cfd5e1; text-decoration: none; padding: .62rem .8rem; border-radius: 10px; font-weight: 500; }
+.sidebar a:hover { background: rgba(255,255,255,.06); color: #fff; }
+.sidebar a.active { background: rgba(255,255,255,.12); color: #fff; }
+.sidebar-foot { margin-top: auto; display: grid; gap: .2rem; border-top: 1px solid rgba(255,255,255,.1); padding-top: 1rem; }
+
+.dash-main { padding: 1.8rem clamp(16px, 3vw, 2.5rem); min-width: 0; }
+.dash-top { display: flex; justify-content: space-between; align-items: center; gap: 1rem; margin-bottom: 1.4rem; flex-wrap: wrap; }
+.dash-top h1 { font-size: 1.9rem; margin: 0; }
+
+.kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 1.25rem; }
+.kpis-6 { grid-template-columns: repeat(3, 1fr); }
+.kpi { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 1.1rem 1.25rem; box-shadow: var(--shadow); }
+.kpi span { color: var(--muted); font-size: .85rem; }
+.kpi strong { display: block; font: 700 2rem var(--serif); }
+.kpi strong.kpi-text { font-size: 1.35rem; margin-top: .35rem; background: none; padding: 0; }
+.kpi strong.accent { color: var(--accent); }
+.kpi .status-approuvee { color: #135c34; }
+.kpi .status-en_attente { color: var(--warn-ink); }
+.kpi .status-refusee, .kpi .status-suspendue { color: var(--danger); }
+
+.panels { display: grid; grid-template-columns: 1.3fr 1fr; gap: 1rem; }
+.panel { margin-bottom: 1rem; }
+.panel-head { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; }
+.panel-head a { font-weight: 600; text-decoration: none; font-size: .9rem; }
+.panel.narrow { max-width: 680px; }
+
+.bars { display: flex; align-items: flex-end; gap: .7rem; height: 200px; padding-top: 1rem; }
+.bar-col { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; gap: .35rem; }
+.bar { width: 100%; max-width: 40px; min-height: 3px; background: var(--primary); border-radius: 6px 6px 0 0; }
+.bar-val { font-size: .8rem; font-weight: 600; }
+.bar-label { font-size: .75rem; color: var(--muted); }
+
+.list { list-style: none; padding: 0; margin: 0; }
+.list li { display: flex; justify-content: space-between; align-items: center; gap: .75rem; padding: .75rem 0; border-bottom: 1px solid var(--line); }
+.list li:last-child { border: 0; }
+.list-wrap { flex-wrap: wrap; }
+
+.tabs { display: flex; gap: .4rem; flex-wrap: wrap; margin-bottom: 1rem; }
+.tabs a { padding: .45rem .9rem; border-radius: 999px; text-decoration: none; color: var(--ink); background: var(--surface); border: 1px solid var(--line); font-weight: 500; font-size: .9rem; }
+.tabs a.active { background: var(--ink); color: #fff; border-color: var(--ink); }
+
+.table-wrap { overflow-x: auto; }
+.table { width: 100%; border-collapse: collapse; font-size: .92rem; }
+.table th { text-align: left; color: var(--muted); font-weight: 500; padding: .6rem; border-bottom: 1px solid var(--line); white-space: nowrap; }
+.table td { padding: .7rem .6rem; border-bottom: 1px solid var(--line); white-space: nowrap; vertical-align: middle; }
+.table td.wrap { white-space: normal; min-width: 180px; }
+.table td a { color: var(--ink); }
+.row-off td { opacity: .5; }
+.thumb { width: 44px; height: 44px; border-radius: 8px; overflow: hidden; background: #f1ece4; display: grid; place-items: center; font: 700 1.1rem var(--serif); color: #d6cdbf; }
+.thumb img { width: 100%; height: 100%; object-fit: cover; }
+.role { font-size: .78rem; font-weight: 600; padding: .15rem .55rem; border-radius: 999px; background: #eef0f3; }
+.role-vendeur { background: var(--accent-soft); color: var(--accent); }
+.role-admin { background: var(--ink); color: #fff; }
+.status-select { font: 600 .82rem var(--sans); padding: .35rem .5rem; border-radius: 999px; border: 0; cursor: pointer; }
+
+@media (max-width: 1000px) {
+  .kpis, .kpis-6 { grid-template-columns: repeat(2, 1fr); }
+  .panels { grid-template-columns: 1fr; }
+}
+@media (max-width: 800px) {
+  .dash-layout { grid-template-columns: 1fr; }
+  .sidebar { position: static; height: auto; }
+  .sidebar nav { grid-template-columns: repeat(2, 1fr); }
+  .sidebar-foot { margin-top: 0; grid-template-columns: repeat(3, 1fr); font-size: .85rem; }
+}

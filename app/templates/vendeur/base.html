@@ -1,0 +1,21 @@
+{% extends "dash_base.html" %}
+{% block title %}{% block page %}Ma boutique{% endblock %} — {{ site_name }}{% endblock %}
+{% block role %}Espace vendeur · {{ g.boutique.nom }}{% endblock %}
+{% block menu %}
+  {% set ep = request.endpoint %}
+  <a href="{{ url_for('vendeur.dashboard') }}" class="{{ 'active' if ep == 'vendeur.dashboard' }}">📊 Tableau de bord</a>
+  <a href="{{ url_for('vendeur.produits') }}" class="{{ 'active' if ep in ('vendeur.produits', 'vendeur.produit_form') }}">📦 Mes produits</a>
+  <a href="{{ url_for('vendeur.commandes') }}" class="{{ 'active' if ep == 'vendeur.commandes' }}">🧾 Commandes reçues</a>
+  <a href="{{ url_for('vendeur.reglages') }}" class="{{ 'active' if ep == 'vendeur.reglages' }}">🏪 Ma boutique</a>
+  <a href="{{ url_for('main.boutique', boutique_id=g.boutique.id) }}">👁 Voir ma vitrine</a>
+{% endblock %}
+{% block dash %}
+  {% if g.boutique.statut == 'en_attente' %}
+    <div class="flash flash-warn">⏳ Votre boutique est <strong>en attente de validation</strong> par l'administrateur. Vous pouvez déjà ajouter vos produits : ils seront visibles dès la validation.</div>
+  {% elif g.boutique.statut == 'refusee' %}
+    <div class="flash flash-error">Votre boutique a été refusée. Contactez l'administrateur pour plus d'informations.</div>
+  {% elif g.boutique.statut == 'suspendue' %}
+    <div class="flash flash-error">Votre boutique est suspendue : elle n'est plus visible par les clients.</div>
+  {% endif %}
+  {% block vendeur %}{% endblock %}
+{% endblock %}

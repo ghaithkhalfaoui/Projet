@@ -1,0 +1,35 @@
+{% extends "vendeur/base.html" %}
+{% block page %}Commandes reçues{% endblock %}
+{% block heading %}Commandes reçues{% endblock %}
+{% block vendeur %}
+<section class="panel">
+  {% if lignes %}
+  <div class="table-wrap">
+    <table class="table">
+      <thead><tr><th>N°</th><th>Date</th><th>Produit</th><th>Total</th><th>Client / livraison</th><th>Statut</th></tr></thead>
+      <tbody>
+        {% for l in lignes %}
+        <tr>
+          <td>#{{ l.commande_id }}</td>
+          <td>{{ l.created_at[:16] }}</td>
+          <td><strong>{{ l.quantite }} × {{ l.nom_produit }}</strong></td>
+          <td>{{ (l.prix * l.quantite) | dt }}</td>
+          <td class="wrap"><strong>{{ l.client }}</strong> · {{ l.telephone }}<br><small class="muted">{{ l.adresse }}, {{ l.ville }}</small></td>
+          <td>
+            <form method="post" action="{{ url_for('vendeur.commande_statut', ligne_id=l.id) }}">
+              <select name="statut" onchange="this.form.submit()" class="status-select status-{{ l.statut }}">
+                {% for s in statuts %}<option value="{{ s }}" {{ 'selected' if s == l.statut }}>{{ STATUTS[s] }}</option>{% endfor %}
+              </select>
+              <noscript><button class="btn btn-small">OK</button></noscript>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+    <p class="muted">Aucune commande reçue pour l'instant.</p>
+  {% endif %}
+</section>
+{% endblock %}

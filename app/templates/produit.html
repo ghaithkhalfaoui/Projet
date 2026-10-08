@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% from "_cartes.html" import carte_produit %}
+{% block title %}{{ p.nom }} — {{ site_name }}{% endblock %}
+{% block content %}
+<section class="section">
+  <div class="container product-page">
+    <div class="product-page-img">
+      {% if p.image %}
+        <img src="{{ url_for('static', filename='uploads/' ~ p.image) }}" alt="{{ p.nom }}">
+      {% else %}
+        <span class="placeholder">{{ p.nom[:1] | upper }}</span>
+      {% endif %}
+    </div>
+    <div>
+      <a class="product-shop" href="{{ url_for('main.boutique', boutique_id=p.boutique_id) }}">{{ p.boutique_nom }}</a>
+      <h1>{{ p.nom }}</h1>
+      <p class="price price-lg">{{ p.prix | dt }}</p>
+      {% if p.stock > 0 %}
+        <p class="stock-ok">✓ En stock ({{ p.stock }})</p>
+        <form method="post" action="{{ url_for('main.panier_ajouter', produit_id=p.id) }}" class="buy">
+          <input type="number" name="qte" value="1" min="1" max="{{ p.stock }}" aria-label="Quantité">
+          <button class="btn">Ajouter au panier</button>
+        </form>
+      {% else %}
+        <p class="stock-out">Épuisé pour le moment</p>
+      {% endif %}
+      {% if p.description %}
+        <h3 class="mt">Description</h3>
+        <p class="pre">{{ p.description }}</p>
+      {% endif %}
+      <p class="muted small mt">💵 Paiement à la livraison</p>
+    </div>
+  </div>
+</section>
+
+{% if autres %}
+<section class="section">
+  <div class="container">
+    <div class="section-head"><h2>De la même boutique</h2></div>
+    <div class="products">{% for x in autres %}{{ carte_produit(x, avec_boutique=false) }}{% endfor %}</div>
+  </div>
+</section>
+{% endif %}
+{% endblock %}

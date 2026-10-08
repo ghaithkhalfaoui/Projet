@@ -1,0 +1,12 @@
+{% macro actions_boutique(b) %}
+  <div class="actions-cell">
+    {% for s, label, cls in [('approuvee', 'Approuver', ''), ('refusee', 'Refuser', 'btn-danger'), ('suspendue', 'Suspendre', 'btn-ghost')] %}
+      {% if b.statut != s and not (s == 'suspendue' and b.statut != 'approuvee') and not (s == 'refusee' and b.statut == 'approuvee') %}
+        <form method="post" action="{{ url_for('admin.boutique_statut', boutique_id=b.id) }}">
+          <input type="hidden" name="statut" value="{{ s }}">
+          <button class="btn btn-small {{ cls }}">{{ label }}</button>
+        </form>
+      {% endif %}
+    {% endfor %}
+  </div>
+{% endmacro %}

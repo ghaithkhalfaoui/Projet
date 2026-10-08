@@ -1,0 +1,49 @@
+{# Petits blocs reutilises sur plusieurs pages #}
+
+{% macro carte_produit(p, avec_boutique=true) %}
+<article class="product">
+  <a href="{{ url_for('main.produit', produit_id=p.id) }}" class="product-img">
+    {% if p.image %}
+      <img src="{{ url_for('static', filename='uploads/' ~ p.image) }}" alt="{{ p.nom }}" loading="lazy">
+    {% else %}
+      <span class="placeholder">{{ p.nom[:1] | upper }}</span>
+    {% endif %}
+    {% if p.stock <= 0 %}<span class="tag tag-out">Épuisé</span>{% endif %}
+  </a>
+  <div class="product-body">
+    {% if avec_boutique and p.boutique_nom %}
+      <a class="product-shop" href="{{ url_for('main.boutique', boutique_id=p.boutique_id) }}">{{ p.boutique_nom }}</a>
+    {% endif %}
+    <a class="product-name" href="{{ url_for('main.produit', produit_id=p.id) }}">{{ p.nom }}</a>
+    <div class="product-foot">
+      <strong class="price">{{ p.prix | dt }}</strong>
+      {% if p.stock > 0 %}
+        <form method="post" action="{{ url_for('main.panier_ajouter', produit_id=p.id) }}">
+          <button class="icon-btn" title="Ajouter au panier">＋</button>
+        </form>
+      {% endif %}
+    </div>
+  </div>
+</article>
+{% endmacro %}
+
+{% macro carte_boutique(b) %}
+<a class="shop" href="{{ url_for('main.boutique', boutique_id=b.id) }}">
+  <span class="shop-logo">
+    {% if b.logo %}<img src="{{ url_for('static', filename='uploads/' ~ b.logo) }}" alt="">{% else %}{{ b.nom[:1] | upper }}{% endif %}
+  </span>
+  <span class="shop-info">
+    <strong>{{ b.nom }}</strong>
+    <small class="muted">{{ b.categorie or 'Boutique' }}</small>
+  </span>
+</a>
+{% endmacro %}
+
+{% macro vide(titre, texte, lien=None, bouton=None) %}
+<div class="empty">
+  <div class="empty-icon">◌</div>
+  <h3>{{ titre }}</h3>
+  <p class="muted">{{ texte }}</p>
+  {% if lien %}<a class="btn" href="{{ lien }}">{{ bouton }}</a>{% endif %}
+</div>
+{% endmacro %}

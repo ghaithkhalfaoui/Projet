@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Mon compte — {{ site_name }}{% endblock %}
+{% block content %}
+<section class="section">
+  <div class="container">
+    <h1>Mon compte</h1>
+    <p class="muted">{{ user.email }} · compte {{ user.role }}</p>
+    <div class="two-cols">
+      <form method="post" class="panel form">
+        <input type="hidden" name="action" value="profil">
+        <h3>Mes informations</h3>
+        <label>Nom complet<input name="nom" value="{{ user.nom }}" required></label>
+        <label>Téléphone<input name="telephone" value="{{ user.telephone or '' }}"></label>
+        <button class="btn">Enregistrer</button>
+      </form>
+      <form method="post" class="panel form">
+        <input type="hidden" name="action" value="password">
+        <h3>Changer le mot de passe</h3>
+        <label>Mot de passe actuel<input type="password" name="actuel" required></label>
+        <label>Nouveau mot de passe<input type="password" name="nouveau" minlength="6" required></label>
+        <button class="btn">Changer</button>
+      </form>
+    </div>
+  </div>
+</section>
+{% endblock %}

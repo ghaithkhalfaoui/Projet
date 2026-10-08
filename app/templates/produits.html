@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% from "_cartes.html" import carte_produit, vide %}
+{% block title %}Produits — {{ site_name }}{% endblock %}
+{% block content %}
+<section class="section">
+  <div class="container">
+    <div class="section-head">
+      <h1>{% if q %}Résultats pour « {{ q }} »{% else %}Tous les produits{% endif %}</h1>
+      <span class="muted">{{ produits | length }} produit(s)</span>
+    </div>
+    {% if produits %}
+      <div class="products">{% for p in produits %}{{ carte_produit(p) }}{% endfor %}</div>
+    {% else %}
+      {{ vide("Aucun produit trouvé", "Essayez un autre mot-clé." if q else "Les produits des boutiques s'afficheront ici.") }}
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

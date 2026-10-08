@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% from "_cartes.html" import vide %}
+{% block title %}Mes commandes — {{ site_name }}{% endblock %}
+{% block content %}
+<section class="section">
+  <div class="container">
+    <h1>Mes commandes</h1>
+    {% for c in commandes %}
+      <div class="panel order">
+        <div class="order-head">
+          <strong>Commande n° {{ c.id }}</strong>
+          <span class="muted">{{ c.created_at[:16] }}</span>
+          <strong class="price">{{ c.total | dt }}</strong>
+        </div>
+        {% for l in lignes[c.id] %}
+          <div class="order-line">
+            <span>{{ l.quantite }} × {{ l.nom_produit }} <small class="muted">— {{ l.boutique_nom }}</small></span>
+            <span class="status status-{{ l.statut }}">{{ STATUTS[l.statut] }}</span>
+          </div>
+        {% endfor %}
+        <p class="muted small">Livraison : {{ c.adresse }}, {{ c.ville }} · {{ c.telephone }}</p>
+      </div>
+    {% else %}
+      {{ vide("Aucune commande", "Vos commandes apparaîtront ici.", url_for('main.produits'), "Faire mes achats") }}
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

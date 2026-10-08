@@ -1,0 +1,50 @@
+{% extends "admin/base.html" %}
+{% from "admin/_macros.html" import actions_boutique %}
+{% block heading %}Tableau de bord{% endblock %}
+{% block admin %}
+<div class="kpis kpis-6">
+  <div class="kpi"><span>Clients</span><strong>{{ stats.clients }}</strong></div>
+  <div class="kpi"><span>Boutiques actives</span><strong>{{ stats.boutiques }}</strong></div>
+  <div class="kpi"><span>Demandes en attente</span><strong class="{{ 'accent' if stats.en_attente }}">{{ stats.en_attente }}</strong></div>
+  <div class="kpi"><span>Produits</span><strong>{{ stats.produits }}</strong></div>
+  <div class="kpi"><span>Commandes</span><strong>{{ stats.commandes }}</strong></div>
+  <div class="kpi"><span>Ventes totales</span><strong class="kpi-text">{{ stats.ventes | dt }}</strong></div>
+</div>
+
+<div class="panels">
+  <section class="panel">
+    <div class="panel-head">
+      <h3>Boutiques à valider</h3>
+      <a href="{{ url_for('admin.boutiques', statut='en_attente') }}">Tout voir →</a>
+    </div>
+    {% if demandes %}
+      <ul class="list">
+        {% for b in demandes %}
+          <li class="list-wrap">
+            <span>
+              <strong>{{ b.nom }}</strong> <small class="muted">· {{ b.categorie or '—' }}</small><br>
+              <small class="muted">{{ b.proprietaire }} — {{ b.email }} — {{ b.created_at[:10] }}</small>
+            </span>
+            {{ actions_boutique(b) }}
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p class="muted">Aucune demande en attente. 🎉</p>
+    {% endif %}
+  </section>
+
+  <section class="panel">
+    <h3>Commandes des 7 derniers jours</h3>
+    <div class="bars">
+      {% for d in chart %}
+        <div class="bar-col" title="{{ d.value }} commande(s)">
+          <span class="bar-val">{{ d.value }}</span>
+          <div class="bar" style="height: {{ (d.value / chart_max * 100) | round(0) }}%"></div>
+          <span class="bar-label">{{ d.label }}</span>
+        </div>
+      {% endfor %}
+    </div>
+  </section>
+</div>
+{% endblock %}

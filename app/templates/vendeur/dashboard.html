@@ -1,0 +1,34 @@
+{% extends "vendeur/base.html" %}
+{% block heading %}Bonjour {{ user.nom.split(' ')[0] }} 👋{% endblock %}
+{% block actions %}<a class="btn" href="{{ url_for('vendeur.produit_form') }}">+ Ajouter un produit</a>{% endblock %}
+{% block vendeur %}
+<div class="kpis">
+  <div class="kpi"><span>Statut de la boutique</span><strong class="kpi-text status-{{ g.boutique.statut }}">{{ STATUTS[g.boutique.statut] }}</strong></div>
+  <div class="kpi"><span>Produits</span><strong>{{ stats.produits }}</strong></div>
+  <div class="kpi"><span>Commandes à traiter</span><strong class="{{ 'accent' if stats.a_traiter }}">{{ stats.a_traiter }}</strong></div>
+  <div class="kpi"><span>Total des ventes</span><strong class="kpi-text">{{ stats.ventes | dt }}</strong></div>
+</div>
+
+{% if stats.rupture %}
+  <div class="flash flash-warn">{{ stats.rupture }} produit(s) en rupture de stock. <a href="{{ url_for('vendeur.produits') }}">Mettre à jour</a></div>
+{% endif %}
+
+<section class="panel">
+  <div class="panel-head">
+    <h3>Dernières commandes</h3>
+    <a href="{{ url_for('vendeur.commandes') }}">Tout voir →</a>
+  </div>
+  {% if dernieres %}
+    <ul class="list">
+      {% for l in dernieres %}
+        <li>
+          <span><strong>{{ l.quantite }} × {{ l.nom_produit }}</strong> <small class="muted">— {{ l.client }}, {{ l.created_at[:16] }}</small></span>
+          <span class="status status-{{ l.statut }}">{{ STATUTS[l.statut] }}</span>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p class="muted">Aucune commande pour l'instant.{% if not stats.produits %} Commencez par <a href="{{ url_for('vendeur.produit_form') }}">ajouter un produit</a>.{% endif %}</p>
+  {% endif %}
+</section>
+{% endblock %}
