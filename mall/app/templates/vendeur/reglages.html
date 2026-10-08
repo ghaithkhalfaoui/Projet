@@ -1,0 +1,22 @@
+{% extends "vendeur/base.html" %}
+{% block page %}Ma boutique{% endblock %}
+{% block heading %}Ma boutique{% endblock %}
+{% block vendeur %}
+{% set b = g.boutique %}
+<form method="post" enctype="multipart/form-data" class="panel form narrow">
+  <div class="row">
+    <label>Nom de la boutique *<input name="nom" value="{{ b.nom }}" required></label>
+    <label>Catégorie<input name="categorie" value="{{ b.categorie or '' }}"></label>
+  </div>
+  <label>Description<textarea name="description" rows="4">{{ b.description or '' }}</textarea></label>
+  <div class="row">
+    <label>Téléphone<input name="telephone" value="{{ b.telephone or '' }}"></label>
+    <label>Adresse / ville<input name="adresse" value="{{ b.adresse or '' }}"></label>
+  </div>
+  <label>Logo
+    {% if b.logo %}<img class="preview preview-round" src="{{ url_for('static', filename='uploads/' ~ b.logo) }}" alt="">{% endif %}
+    <input type="file" name="logo" accept="image/*">
+  </label>
+  <div class="actions"><button class="btn">Enregistrer</button></div>
+</form>
+{% endblock %}

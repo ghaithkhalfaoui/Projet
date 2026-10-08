@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% from "_cartes.html" import carte_produit, vide %}
+{% block title %}{{ b.nom }} — {{ site_name }}{% endblock %}
+{% block content %}
+<section class="shop-hero">
+  <div class="container shop-hero-inner">
+    <span class="shop-logo shop-logo-lg">
+      {% if b.logo %}<img src="{{ url_for('static', filename='uploads/' ~ b.logo) }}" alt="">{% else %}{{ b.nom[:1] | upper }}{% endif %}
+    </span>
+    <div>
+      {% if b.categorie %}<p class="eyebrow">{{ b.categorie }}</p>{% endif %}
+      <h1>{{ b.nom }}</h1>
+      {% if b.description %}<p class="lead">{{ b.description }}</p>{% endif %}
+      <p class="muted small">
+        {% if b.adresse %}📍 {{ b.adresse }}{% endif %}
+        {% if b.telephone %} · 📞 {{ b.telephone }}{% endif %}
+      </p>
+    </div>
+  </div>
+  {% if b.statut != 'approuvee' %}
+    <div class="container"><div class="flash flash-error">Aperçu : cette boutique n'est pas encore visible par les clients ({{ STATUTS[b.statut] }}).</div></div>
+  {% endif %}
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-head"><h2>Produits</h2><span class="muted">{{ produits | length }} produit(s)</span></div>
+    {% if produits %}
+      <div class="products">{% for p in produits %}{{ carte_produit(p, avec_boutique=false) }}{% endfor %}</div>
+    {% else %}
+      {{ vide("Pas encore de produits", "Cette boutique n'a pas encore ajouté de produits.") }}
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

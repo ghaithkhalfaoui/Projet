@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Créer un compte — {{ site_name }}{% endblock %}
+{% block content %}
+<section class="section">
+  <div class="container auth-wrap">
+    <form method="post" class="panel form auth-card">
+      <p class="eyebrow">Compte client</p>
+      <h1>Créer un compte</h1>
+      <p class="muted">Pour acheter dans toutes les boutiques du mall.</p>
+      <label>Nom complet *<input name="nom" value="{{ form.get('nom', '') }}" required></label>
+      <div class="row">
+        <label>E-mail *<input type="email" name="email" value="{{ form.get('email', '') }}" required></label>
+        <label>Téléphone<input name="telephone" value="{{ form.get('telephone', '') }}"></label>
+      </div>
+      <div class="row">
+        <label>Mot de passe *<input type="password" name="password" minlength="6" required></label>
+        <label>Confirmer *<input type="password" name="password2" minlength="6" required></label>
+      </div>
+      <button class="btn btn-block">Créer mon compte</button>
+      <div class="auth-links">
+        <a href="{{ url_for('auth.connexion') }}">J'ai déjà un compte</a>
+        <a href="{{ url_for('auth.ouvrir_boutique') }}">Je veux vendre → Ouvrir ma boutique</a>
+      </div>
+    </form>
+  </div>
+</section>
+{% endblock %}

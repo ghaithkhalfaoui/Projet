@@ -1,0 +1,11 @@
+{% extends "dash_base.html" %}
+{% block title %}{% block page %}Administration{% endblock %} — {{ site_name }}{% endblock %}
+{% block role %}Administration{% endblock %}
+{% block menu %}
+  {% set ep = request.endpoint %}
+  <a href="{{ url_for('admin.dashboard') }}" class="{{ 'active' if ep == 'admin.dashboard' }}">📊 Tableau de bord</a>
+  <a href="{{ url_for('admin.boutiques') }}" class="{{ 'active' if ep == 'admin.boutiques' }}">🏪 Boutiques</a>
+  <a href="{{ url_for('admin.utilisateurs') }}" class="{{ 'active' if ep == 'admin.utilisateurs' }}">👥 Utilisateurs</a>
+  <a href="{{ url_for('admin.commandes') }}" class="{{ 'active' if ep == 'admin.commandes' }}">🧾 Commandes</a>
+{% endblock %}
+{% block dash %}{% block admin %}{% endblock %}{% endblock %}

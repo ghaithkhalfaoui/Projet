@@ -1,0 +1,34 @@
+{% extends "vendeur/base.html" %}
+{% block page %}Mes produits{% endblock %}
+{% block heading %}Mes produits{% endblock %}
+{% block actions %}<a class="btn" href="{{ url_for('vendeur.produit_form') }}">+ Ajouter un produit</a>{% endblock %}
+{% block vendeur %}
+<section class="panel">
+  {% if produits %}
+  <div class="table-wrap">
+    <table class="table">
+      <thead><tr><th></th><th>Produit</th><th>Prix</th><th>Stock</th><th>Visible</th><th></th></tr></thead>
+      <tbody>
+        {% for p in produits %}
+        <tr>
+          <td><span class="thumb">{% if p.image %}<img src="{{ url_for('static', filename='uploads/' ~ p.image) }}" alt="">{% else %}{{ p.nom[:1] | upper }}{% endif %}</span></td>
+          <td><strong>{{ p.nom }}</strong></td>
+          <td>{{ p.prix | dt }}</td>
+          <td class="{{ 'text-danger' if p.stock == 0 }}">{{ p.stock }}</td>
+          <td>{{ 'Oui' if p.actif else 'Non' }}</td>
+          <td class="actions-cell">
+            <a class="btn btn-small btn-ghost" href="{{ url_for('vendeur.produit_form', produit_id=p.id) }}">Modifier</a>
+            <form method="post" action="{{ url_for('vendeur.produit_supprimer', produit_id=p.id) }}" onsubmit="return confirm('Supprimer ce produit ?')">
+              <button class="btn btn-small btn-danger">Supprimer</button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+    <p class="muted">Vous n'avez pas encore de produits. <a href="{{ url_for('vendeur.produit_form') }}">Ajoutez le premier</a>.</p>
+  {% endif %}
+</section>
+{% endblock %}

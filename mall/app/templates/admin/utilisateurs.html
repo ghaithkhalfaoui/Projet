@@ -1,0 +1,38 @@
+{% extends "admin/base.html" %}
+{% block page %}Utilisateurs{% endblock %}
+{% block heading %}Utilisateurs{% endblock %}
+{% block admin %}
+<div class="tabs">
+  {% for val, label in [('', 'Tous'), ('client', 'Clients'), ('vendeur', 'Vendeurs'), ('admin', 'Admins')] %}
+    <a href="{{ url_for('admin.utilisateurs', role=val or None) }}" class="{{ 'active' if filtre == val }}">{{ label }}</a>
+  {% endfor %}
+</div>
+<section class="panel">
+  <div class="table-wrap">
+    <table class="table">
+      <thead><tr><th>Nom</th><th>E-mail</th><th>Téléphone</th><th>Rôle</th><th>Inscrit le</th><th>État</th><th></th></tr></thead>
+      <tbody>
+        {% for u in users %}
+        <tr class="{{ 'row-off' if not u.actif }}">
+          <td><strong>{{ u.nom }}</strong></td>
+          <td>{{ u.email }}</td>
+          <td>{{ u.telephone or '—' }}</td>
+          <td><span class="role role-{{ u.role }}">{{ u.role }}</span></td>
+          <td>{{ u.created_at[:10] }}</td>
+          <td>{{ 'Actif' if u.actif else 'Désactivé' }}</td>
+          <td>
+            {% if u.id != user.id %}
+            <form method="post" action="{{ url_for('admin.utilisateur_actif', user_id=u.id) }}">
+              <button class="btn btn-small {{ 'btn-danger' if u.actif else '' }}">{{ 'Désactiver' if u.actif else 'Réactiver' }}</button>
+            </form>
+            {% endif %}
+          </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="7" class="muted">Aucun utilisateur.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endblock %}

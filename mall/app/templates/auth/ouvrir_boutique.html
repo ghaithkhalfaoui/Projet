@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}Ouvrir ma boutique — {{ site_name }}{% endblock %}
+{% block content %}
+<section class="seller-hero">
+  <div class="container">
+    <p class="eyebrow">Espace vendeurs</p>
+    <h1>Ouvrez votre boutique dans notre mall</h1>
+    <p class="lead">Inscrivez-vous, ajoutez vos produits, et recevez vos commandes. Votre boutique devient visible dès que l'administrateur l'a validée.</p>
+    <ol class="steps">
+      <li><strong>1</strong> Remplissez le formulaire</li>
+      <li><strong>2</strong> L'administrateur valide votre boutique</li>
+      <li><strong>3</strong> Vous vendez à tous les clients du mall</li>
+    </ol>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <form method="post" enctype="multipart/form-data" class="panel form seller-form">
+      {% if not user %}
+        <h3>1. Vos informations</h3>
+        <div class="row">
+          <label>Nom complet *<input name="nom" value="{{ form.get('nom', '') }}" required></label>
+          <label>Téléphone<input name="telephone" value="{{ form.get('telephone', '') }}"></label>
+        </div>
+        <label>E-mail *<input type="email" name="email" value="{{ form.get('email', '') }}" required></label>
+        <div class="row">
+          <label>Mot de passe *<input type="password" name="password" minlength="6" required></label>
+          <label>Confirmer *<input type="password" name="password2" minlength="6" required></label>
+        </div>
+        <p class="muted small">Déjà client ? <a href="{{ url_for('auth.connexion', next=url_for('auth.ouvrir_boutique')) }}">Connectez-vous</a> puis revenez ici.</p>
+        <hr>
+        <h3>2. Votre boutique</h3>
+      {% else %}
+        <p class="flash flash-success">Connecté en tant que <strong>{{ user.email }}</strong> : votre compte deviendra un compte vendeur.</p>
+        <h3>Votre boutique</h3>
+      {% endif %}
+
+      <div class="row">
+        <label>Nom de la boutique *<input name="boutique_nom" value="{{ form.get('boutique_nom', '') }}" required></label>
+        <label>Catégorie
+          <select name="categorie">
+            {% for c in ['Mode & vêtements', 'Chaussures', 'Beauté & parfums', 'Électronique', 'Téléphonie', 'Maison & déco', 'Alimentation', 'Sport', 'Enfants & jouets', 'Bijoux & accessoires', 'Livres', 'Autre'] %}
+              <option {{ 'selected' if form.get('categorie') == c }}>{{ c }}</option>
+            {% endfor %}
+          </select>
+        </label>
+      </div>
+      <label>Description<textarea name="description" rows="3" placeholder="Ce que vous vendez, ce qui vous rend unique…">{{ form.get('description', '') }}</textarea></label>
+      <div class="row">
+        <label>Téléphone de la boutique<input name="boutique_telephone" value="{{ form.get('boutique_telephone', '') }}"></label>
+        <label>Adresse / ville<input name="adresse" value="{{ form.get('adresse', '') }}"></label>
+      </div>
+      <label>Logo (facultatif)<input type="file" name="logo" accept="image/*"></label>
+      <button class="btn">Envoyer ma demande</button>
+    </form>
+  </div>
+</section>
+{% endblock %}
