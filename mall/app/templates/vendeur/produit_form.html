@@ -1,0 +1,23 @@
+{% extends "vendeur/base.html" %}
+{% block page %}Produit{% endblock %}
+{% block heading %}{{ 'Modifier le produit' if p else 'Nouveau produit' }}{% endblock %}
+{% block vendeur %}
+<form method="post" enctype="multipart/form-data" class="panel form narrow">
+  <label>Nom du produit *<input name="nom" value="{{ form.get('nom', '') }}" required></label>
+  <div class="row">
+    <label>Prix (DT) *<input name="prix" inputmode="decimal" value="{{ form.get('prix', '') }}" required placeholder="ex : 45,500"></label>
+    <label>Quantité en stock *<input type="number" name="stock" min="0" value="{{ form.get('stock', 0) }}" required></label>
+  </div>
+  <label>Description<textarea name="description" rows="5">{{ form.get('description', '') or '' }}</textarea></label>
+  <label>Photo
+    {% if p and p.image %}<img class="preview" src="{{ url_for('static', filename='uploads/' ~ p.image) }}" alt="">{% endif %}
+    <input type="file" name="image" accept="image/*">
+    {% if p and p.image %}<small class="muted">Choisissez une nouvelle photo pour remplacer l'actuelle.</small>{% endif %}
+  </label>
+  <label class="check"><input type="checkbox" name="actif" {{ 'checked' if form.get('actif') }}> Visible dans la boutique</label>
+  <div class="actions">
+    <button class="btn">Enregistrer</button>
+    <a class="btn btn-ghost" href="{{ url_for('vendeur.produits') }}">Annuler</a>
+  </div>
+</form>
+{% endblock %}

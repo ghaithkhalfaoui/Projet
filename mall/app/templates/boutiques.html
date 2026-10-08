@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% from "_cartes.html" import carte_boutique, vide %}
+{% block title %}Boutiques — {{ site_name }}{% endblock %}
+{% block content %}
+<section class="section">
+  <div class="container">
+    <div class="section-head">
+      <h1>Boutiques</h1>
+      <form class="search search-inline">
+        <input name="q" value="{{ q }}" placeholder="Nom, catégorie…">
+      </form>
+    </div>
+    {% if boutiques %}
+      <div class="shops">{% for b in boutiques %}{{ carte_boutique(b) }}{% endfor %}</div>
+    {% elif q %}
+      {{ vide("Aucun résultat", "Aucune boutique ne correspond à « " ~ q ~ " ».") }}
+    {% else %}
+      {{ vide("Aucune boutique pour le moment", "Soyez le premier à ouvrir la vôtre !",
+              url_for('auth.ouvrir_boutique'), "Ouvrir ma boutique") }}
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

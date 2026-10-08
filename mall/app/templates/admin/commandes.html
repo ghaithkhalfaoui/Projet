@@ -1,0 +1,29 @@
+{% extends "admin/base.html" %}
+{% block page %}Commandes{% endblock %}
+{% block heading %}Commandes{% endblock %}
+{% block admin %}
+<section class="panel">
+  {% if commandes %}
+  <div class="table-wrap">
+    <table class="table">
+      <thead><tr><th>N°</th><th>Date</th><th>Client</th><th>Boutique(s)</th><th>Articles</th><th>Total</th><th>Livraison</th></tr></thead>
+      <tbody>
+        {% for c in commandes %}
+        <tr>
+          <td>#{{ c.id }}</td>
+          <td>{{ c.created_at[:16] }}</td>
+          <td>{{ c.nom }}<br><small class="muted">{{ c.email }}</small></td>
+          <td class="wrap">{{ (c.boutiques or '').replace(',', ', ') }}</td>
+          <td>{{ c.nb_articles }}</td>
+          <td><strong>{{ c.total | dt }}</strong></td>
+          <td class="wrap"><small>{{ c.adresse }}, {{ c.ville }}<br>{{ c.telephone }}</small></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+    <p class="muted">Aucune commande pour l'instant.</p>
+  {% endif %}
+</section>
+{% endblock %}

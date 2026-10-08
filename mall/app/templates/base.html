@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}{{ site_name }}{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  {% block head %}{% endblock %}
+</head>
+<body class="{% block body_class %}{% endblock %}">
+  {% block header %}
+  <header class="site-header">
+    <div class="container nav">
+      <a class="brand" href="{{ url_for('main.index') }}"><span class="dot"></span>{{ site_name }}</a>
+
+      <form class="search" action="{{ url_for('main.produits') }}">
+        <input name="q" placeholder="Rechercher un produit…" value="{{ request.args.get('q', '') if request.endpoint == 'main.produits' }}">
+      </form>
+
+      <input type="checkbox" id="menu-toggle" class="menu-toggle">
+      <label for="menu-toggle" class="burger" aria-label="Menu"><span></span><span></span><span></span></label>
+
+      <nav class="links">
+        <a href="{{ url_for('main.boutiques') }}">Boutiques</a>
+        <a href="{{ url_for('main.produits') }}">Produits</a>
+        {% if not user or user.role == 'client' %}
+          <a href="{{ url_for('auth.ouvrir_boutique') }}" class="link-accent">Ouvrir ma boutique</a>
+        {% endif %}
+        <a href="{{ url_for('main.panier') }}" class="cart">🛒 Panier{% if nb_panier %} <span class="badge">{{ nb_panier }}</span>{% endif %}</a>
+
+        {% if not user %}
+          <a href="{{ url_for('auth.connexion') }}">Connexion</a>
+          <a href="{{ url_for('auth.inscription') }}" class="btn btn-small">S'inscrire</a>
+        {% else %}
+          {% if user.role == 'admin' %}
+            <a href="{{ url_for('admin.dashboard') }}" class="btn btn-small">Administration</a>
+          {% elif user.role == 'vendeur' %}
+            <a href="{{ url_for('vendeur.dashboard') }}" class="btn btn-small">Ma boutique</a>
+          {% else %}
+            <a href="{{ url_for('main.mes_commandes') }}">Mes commandes</a>
+          {% endif %}
+          <a href="{{ url_for('auth.mon_compte') }}" title="Mon compte">👤 {{ user.nom.split(' ')[0] }}</a>
+          <a href="{{ url_for('auth.deconnexion') }}" class="muted">Déconnexion</a>
+        {% endif %}
+      </nav>
+    </div>
+  </header>
+  {% endblock %}
+
+  <main>
+    {% block flashes %}
+    {% with msgs = get_flashed_messages(with_categories=true) %}
+      {% if msgs %}
+        <div class="container flashes">
+          {% for cat, m in msgs %}<div class="flash flash-{{ cat }}">{{ m }}</div>{% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+    {% endblock %}
+    {% block content %}{% endblock %}
+  </main>
+
+  {% block footer %}
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div>
+        <a class="brand" href="{{ url_for('main.index') }}"><span class="dot"></span>{{ site_name }}</a>
+        <p class="muted">Le centre commercial en ligne : plusieurs boutiques, un seul panier.</p>
+      </div>
+      <div>
+        <strong>Acheter</strong>
+        <a href="{{ url_for('main.boutiques') }}">Toutes les boutiques</a>
+        <a href="{{ url_for('main.produits') }}">Tous les produits</a>
+      </div>
+      <div>
+        <strong>Vendre</strong>
+        <a href="{{ url_for('auth.ouvrir_boutique') }}">Ouvrir ma boutique</a>
+        <a href="{{ url_for('auth.connexion') }}">Espace vendeur</a>
+      </div>
+    </div>
+  </footer>
+  {% endblock %}
+</body>
+</html>

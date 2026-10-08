@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% from "_cartes.html" import carte_produit, carte_boutique, vide %}
+{% block content %}
+
+<section class="section">
+  <div class="container">
+    <div class="section-head">
+      <h2>Boutiques</h2>
+      {% if boutiques %}<a href="{{ url_for('main.boutiques') }}">Voir tout →</a>{% endif %}
+    </div>
+    {% if boutiques %}
+      <div class="shops">{% for b in boutiques %}{{ carte_boutique(b) }}{% endfor %}</div>
+    {% else %}
+      {{ vide("Aucune boutique pour le moment",
+              "Les boutiques apparaîtront ici dès qu'elles seront validées.",
+              url_for('auth.ouvrir_boutique'), "Ouvrir ma boutique") }}
+    {% endif %}
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-head">
+      <h2>Nouveaux produits</h2>
+      {% if produits %}<a href="{{ url_for('main.produits') }}">Voir tout →</a>{% endif %}
+    </div>
+    {% if produits %}
+      <div class="products">{% for p in produits %}{{ carte_produit(p) }}{% endfor %}</div>
+    {% else %}
+      {{ vide("Aucun produit pour le moment", "Les produits des boutiques s'afficheront ici.") }}
+    {% endif %}
+  </div>
+</section>
+
+{% endblock %}

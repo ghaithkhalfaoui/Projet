@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% from "_cartes.html" import vide %}
+{% block title %}Panier — {{ site_name }}{% endblock %}
+{% block content %}
+<section class="section">
+  <div class="container">
+    <h1>Mon panier</h1>
+    {% if lignes %}
+    <div class="cart-layout">
+      <div class="panel">
+        {% for l in lignes %}
+          <div class="cart-line">
+            <a href="{{ url_for('main.produit', produit_id=l.p.id) }}" class="cart-thumb">
+              {% if l.p.image %}<img src="{{ url_for('static', filename='uploads/' ~ l.p.image) }}" alt="">{% else %}{{ l.p.nom[:1] | upper }}{% endif %}
+            </a>
+            <div class="cart-name">
+              <a href="{{ url_for('main.produit', produit_id=l.p.id) }}"><strong>{{ l.p.nom }}</strong></a>
+              <small class="muted">{{ l.p.boutique_nom }} · {{ l.p.prix | dt }}</small>
+            </div>
+            <form method="post" action="{{ url_for('main.panier_modifier', produit_id=l.p.id) }}" class="qty">
+              <input type="number" name="qte" value="{{ l.qte }}" min="0" max="{{ l.p.stock }}" onchange="this.form.submit()" aria-label="Quantité">
+            </form>
+            <strong class="cart-sub">{{ l.sous_total | dt }}</strong>
+            <form method="post" action="{{ url_for('main.panier_modifier', produit_id=l.p.id) }}">
+              <input type="hidden" name="qte" value="0">
+              <button class="icon-btn icon-btn-ghost" title="Retirer">✕</button>
+            </form>
+          </div>
+        {% endfor %}
+      </div>
+      <aside class="panel summary">
+        <div class="summary-row"><span>Total</span><strong class="price-lg">{{ total | dt }}</strong></div>
+        <p class="muted small">Paiement à la livraison.</p>
+        {% if user and user.role != 'client' %}
+          <p class="flash flash-error small">Seuls les comptes clients peuvent commander. Créez un compte client avec un autre e-mail.</p>
+        {% else %}
+          <a class="btn btn-block" href="{{ url_for('main.commander') }}">Commander</a>
+          {% if not user %}<p class="muted small center">Vous devrez vous connecter ou créer un compte.</p>{% endif %}
+        {% endif %}
+        <a class="btn btn-ghost btn-block" href="{{ url_for('main.produits') }}">Continuer mes achats</a>
+      </aside>
+    </div>
+    {% else %}
+      {{ vide("Votre panier est vide", "Parcourez les boutiques et ajoutez des produits.", url_for('main.produits'), "Voir les produits") }}
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

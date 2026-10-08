@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{# Mise en page commune aux espaces vendeur et admin : menu a gauche #}
+{% block head %}<link rel="stylesheet" href="{{ url_for('static', filename='css/dash.css') }}">{% endblock %}
+{% block body_class %}dash{% endblock %}
+{% block header %}{% endblock %}
+{% block footer %}{% endblock %}
+{% block flashes %}{% endblock %}
+
+{% block content %}
+<div class="dash-layout">
+  <aside class="sidebar">
+    <a class="brand" href="{{ url_for('main.index') }}"><span class="dot"></span>{{ site_name }}</a>
+    <p class="sidebar-role">{% block role %}{% endblock %}</p>
+    <nav>{% block menu %}{% endblock %}</nav>
+    <div class="sidebar-foot">
+      <a href="{{ url_for('main.index') }}">↗ Voir le site</a>
+      <a href="{{ url_for('auth.mon_compte') }}">👤 Mon compte</a>
+      <a href="{{ url_for('auth.deconnexion') }}">⎋ Déconnexion</a>
+    </div>
+  </aside>
+  <div class="dash-main">
+    <header class="dash-top">
+      <h1>{% block heading %}{% endblock %}</h1>
+      <div>{% block actions %}{% endblock %}</div>
+    </header>
+    {% with msgs = get_flashed_messages(with_categories=true) %}
+      {% for cat, m in msgs %}<div class="flash flash-{{ cat }}">{{ m }}</div>{% endfor %}
+    {% endwith %}
+    {% block dash %}{% endblock %}
+  </div>
+</div>
+{% endblock %}

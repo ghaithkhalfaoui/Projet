@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Commander — {{ site_name }}{% endblock %}
+{% block content %}
+<section class="section">
+  <div class="container">
+    <h1>Finaliser ma commande</h1>
+    <div class="cart-layout">
+      <form method="post" class="panel form">
+        <h3>Adresse de livraison</h3>
+        <div class="row">
+          <label>Nom complet *<input name="nom" value="{{ form.get('nom', '') }}" required></label>
+          <label>Téléphone *<input name="telephone" value="{{ form.get('telephone', '') }}" required></label>
+        </div>
+        <label>Adresse *<input name="adresse" value="{{ form.get('adresse', '') }}" required placeholder="Rue, numéro, immeuble…"></label>
+        <label>Ville *<input name="ville" value="{{ form.get('ville', '') }}" required></label>
+        <p class="muted small">💵 Vous payez en espèces à la réception du colis.</p>
+        <button class="btn">Confirmer la commande</button>
+      </form>
+      <aside class="panel summary">
+        <h3>Récapitulatif</h3>
+        {% for l in lignes %}
+          <div class="summary-row small"><span>{{ l.qte }} × {{ l.p.nom }}</span><span>{{ l.sous_total | dt }}</span></div>
+        {% endfor %}
+        <hr>
+        <div class="summary-row"><span>Total</span><strong class="price-lg">{{ total | dt }}</strong></div>
+      </aside>
+    </div>
+  </div>
+</section>
+{% endblock %}
